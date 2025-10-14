@@ -56,7 +56,6 @@ async function handleChatRequest(
   env: Env,
 ): Promise<Response> {
   // define secrets pulled from the Cloudflare dashboard
-  const GATEWAY_ID = env.GATEWAY_ID;
   const GATEWAY_TOKEN = env.LLM_CHAT_APP;
   const gateway = env.AI.gateway(env.GATEWAY_ID)
   try {

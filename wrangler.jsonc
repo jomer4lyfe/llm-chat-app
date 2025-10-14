@@ -17,5 +17,17 @@
   "ai": {
     "binding": "AI"
   },
-  "upload_source_maps": true
+  "upload_source_maps": true,
+  "secrets_store_secrets": [
+    {
+      "binding": "GATEWAY_ID",
+      "store_id": "6a59603e25804a66af3c8d65be899f68",
+      "secret_name": "GATEWAY_ID"
+    },
+    {
+      "binding": "GATEWAY_TOKEN",
+      "store_id": "6a59603e25804a66af3c8d65be899f68",
+      "secret_name": "LLM_CHAT_APP"
+    }
+  ]
 }
