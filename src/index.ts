@@ -58,6 +58,7 @@ async function handleChatRequest(
   // define secrets pulled from the Cloudflare dashboard
   const GATEWAY_ID = env.GATEWAY_ID;
   const GATEWAY_TOKEN = env.LLM_CHAT_APP;
+  const gateway = env.AI.gateway(env.GATEWAY_ID)
   try {
     // Parse JSON request body
     const { messages = [] } = (await request.json()) as {
@@ -69,7 +70,20 @@ async function handleChatRequest(
       messages.unshift({ role: "system", content: SYSTEM_PROMPT });
     }
 
-    const response = await env.AI.run(
+    const response = await gateway.run({
+      provider: "workers-ai",
+      endpoint: "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+      headers: {
+        "cf-aig-authorization": `Bearer ${GATEWAY_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      query: {
+        messages,
+        max_tokens: 1024,
+      }
+    })
+
+/*     const response = await env.AI.run(
       MODEL_ID,
       {
         messages,
@@ -88,7 +102,7 @@ async function handleChatRequest(
         "cf-aig-authorization": `Bearer ${GATEWAY_TOKEN}`,
         //Authorization: `Bearer ${GATEWAY_TOKEN}`,
       }
-    );
+    ); */
 
     // Return streaming response
     return response;
