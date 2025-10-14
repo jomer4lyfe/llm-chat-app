@@ -7,6 +7,10 @@ export interface Env {
    * Binding for the Workers AI API.
    */
   AI: Ai;
+  // Added from the secrets store on Cloudflare dashboard
+  GATEWAY_ID: string;
+  LLM_CHAT_APP: string;
+
 
   /**
    * Binding for static assets.
