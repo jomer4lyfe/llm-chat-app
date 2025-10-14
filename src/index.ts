@@ -93,7 +93,7 @@ async function handleChatRequest(
         returnRawResponse: true,
         // Uncomment to use AI Gateway
         gateway: {
-          id: env.GATEWAY_ID, //"", // Replace with your AI Gateway ID
+          id: "neural-fab",//env.GATEWAY_ID, //"", // Replace with your AI Gateway ID
           skipCache: false,      // Set to true to bypass cache
           cacheTtl: 3600,        // Cache time-to-live in seconds
         },
