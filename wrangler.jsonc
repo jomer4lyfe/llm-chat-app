@@ -18,6 +18,7 @@
     "binding": "AI"
   },
   "upload_source_maps": true,
+  //this is how you add secrets at runtime with authenticated gateway.
   "secrets_store_secrets": [
     {
       "binding": "GATEWAY_ID",

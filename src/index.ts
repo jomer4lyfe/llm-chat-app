@@ -69,20 +69,21 @@ async function handleChatRequest(
       messages.unshift({ role: "system", content: SYSTEM_PROMPT });
     }
 
-    const response = await gateway.run({
+/*     const response = await gateway.run({
       provider: "workers-ai",
-      endpoint: "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+      endpoint: "/v1/chat/completions",
       headers: {
         "cf-aig-authorization": `Bearer ${GATEWAY_TOKEN}`,
         "Content-Type": "application/json",
       },
       query: {
+        model: MODEL_ID,
         messages,
         max_tokens: 1024,
       }
-    })
+    }) */
 
-/*     const response = await env.AI.run(
+     const response = await env.AI.run(
       MODEL_ID,
       {
         messages,
@@ -92,16 +93,16 @@ async function handleChatRequest(
         returnRawResponse: true,
         // Uncomment to use AI Gateway
         gateway: {
-          id: GATEWAY_ID, //"", // Replace with your AI Gateway ID
+          id: env.GATEWAY_ID, //"", // Replace with your AI Gateway ID
           skipCache: false,      // Set to true to bypass cache
           cacheTtl: 3600,        // Cache time-to-live in seconds
         },
       },
-      headers: {
+/*       headers: {
         "cf-aig-authorization": `Bearer ${GATEWAY_TOKEN}`,
         //Authorization: `Bearer ${GATEWAY_TOKEN}`,
-      }
-    ); */
+      } */
+    );
 
     // Return streaming response
     return response;
