@@ -57,7 +57,7 @@ async function handleChatRequest(
 ): Promise<Response> {
   // define secrets pulled from the Cloudflare dashboard
   const GATEWAY_TOKEN = env.LLM_CHAT_APP;
-  const gateway = env.AI.gateway(env.GATEWAY_ID)
+  const gateway = env.AI.gateway("neural-fab")
   try {
     // Parse JSON request body
     const { messages = [] } = (await request.json()) as {
