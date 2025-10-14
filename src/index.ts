@@ -69,9 +69,9 @@ async function handleChatRequest(
       messages.unshift({ role: "system", content: SYSTEM_PROMPT });
     }
 
-/*     const response = await gateway.run({
+      const response = await gateway.run({
       provider: "workers-ai",
-      endpoint: "/v1/chat/completions",
+      endpoint: "/v1/10db11242a1e4dc47dce52214e9b7aae/neural-fab/compat/chat/completions",
       headers: {
         "cf-aig-authorization": `Bearer ${GATEWAY_TOKEN}`,
         "Content-Type": "application/json",
@@ -81,9 +81,9 @@ async function handleChatRequest(
         messages,
         max_tokens: 1024,
       }
-    }) */
+    }) 
 
-     const response = await env.AI.run(
+/*      const response = await env.AI.run(
       MODEL_ID,
       {
         messages,
@@ -101,8 +101,8 @@ async function handleChatRequest(
 /*       headers: {
         "cf-aig-authorization": `Bearer ${GATEWAY_TOKEN}`,
         //Authorization: `Bearer ${GATEWAY_TOKEN}`,
-      } */
-    );
+      } 
+    ); */
 
     // Return streaming response
     return response;
@@ -117,3 +117,5 @@ async function handleChatRequest(
     );
   }
 }
+
+10db11242a1e4dc47dce52214e9b7aae
