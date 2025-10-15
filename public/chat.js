@@ -8,14 +8,13 @@
 const chatMessages = document.getElementById("chat-messages");
 const userInput = document.getElementById("user-input");
 const sendButton = document.getElementById("send-button");
-const typingIndicator = document.getElementById("typing-indicator");
 
 // Chat state
 let chatHistory = [
   {
     role: "assistant",
     content:
-      "Hello! I'm an LLM chat app powered by Cloudflare Workers AI. How can I help you today?",
+      "Hello! I'm NeuralFab, here to help you make design for manufacturing easier and faster. How can I help you today?",
   },
 ];
 let isProcessing = false;
@@ -36,6 +35,28 @@ userInput.addEventListener("keydown", function (e) {
 
 // Send button click handler
 sendButton.addEventListener("click", sendMessage);
+
+/**
+ * Show typing indicator in chat
+ */
+function showTypingIndicator() {
+  const indicator = document.createElement("div");
+  indicator.className = "typing-indicator visible";
+  indicator.id = "typing-indicator";
+  indicator.innerHTML = "<span></span><span></span><span></span>";
+  chatMessages.appendChild(indicator);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+/**
+ * Hide and remove typing indicator
+ */
+function hideTypingIndicator() {
+  const indicator = document.getElementById("typing-indicator");
+  if (indicator) {
+    indicator.remove();
+  }
+}
 
 /**
  * Sends a message to the chat API and processes the response
@@ -59,8 +80,8 @@ async function sendMessage() {
   userInput.style.height = "auto";
 
   // Show typing indicator
-  typingIndicator.classList.add("visible");
 
+  showTypingIndicator();
   // Add message to history
   chatHistory.push({ role: "user", content: message });
 
@@ -89,6 +110,8 @@ async function sendMessage() {
     if (!response.ok) {
       throw new Error("Failed to get response");
     }
+
+    hideTypingIndicator();
 
     // Process streaming response
     const reader = response.body.getReader();
@@ -134,7 +157,6 @@ async function sendMessage() {
     );
   } finally {
     // Hide typing indicator
-    typingIndicator.classList.remove("visible");
 
     // Re-enable input
     isProcessing = false;

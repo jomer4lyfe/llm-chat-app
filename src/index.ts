@@ -13,7 +13,7 @@ import { handleLoginRequest, handleChatRequest } from "./routes";
 
 // Default system prompt
 const SYSTEM_PROMPT =
-  "You are a helpful, friendly assistant. Provide concise and accurate responses.";
+  "You are an experienced manufacturing engineer, here to assist with design for manufacturing. Provide concise and accurate responses.";
 
 export default {
   /**
