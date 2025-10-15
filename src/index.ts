@@ -14,7 +14,7 @@ import { Env, ChatMessage } from "./types";
 const MODEL_ID = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
 // Default system prompt
 const SYSTEM_PROMPT =
-  "You are a helpful, friendly assistant. Provide concise and accurate responses.";
+  "You are an experienced manufacturing engineer, here to assist with design for manufacturing. Provide concise and accurate responses.";
 
 export default {
   /**
@@ -77,16 +77,18 @@ async function handleChatRequest(
       },
       {
         returnRawResponse: true,
+        /*
         // Uncomment to use AI Gateway
         gateway: {
           id: GATEWAY_ID, //"", // Replace with your AI Gateway ID
           skipCache: false,      // Set to true to bypass cache
           cacheTtl: 3600,        // Cache time-to-live in seconds
         },
-      },
+      }, 
       headers: {
         "cf-aig-authorization": `Bearer ${GATEWAY_TOKEN}`,
         //Authorization: `Bearer ${GATEWAY_TOKEN}`,
+      } */
       }
     );
 
