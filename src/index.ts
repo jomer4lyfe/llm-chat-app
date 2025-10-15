@@ -7,11 +7,10 @@
  *
  * @license MIT
  */
-import { Env, ChatMessage } from "./types";
 
-// Model ID for Workers AI model
-// https://developers.cloudflare.com/workers-ai/models/
-const MODEL_ID = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
+import { Env, ChatMessage } from "./types";
+import { handleLoginRequest, handleChatRequest } from "./routes";
+
 // Default system prompt
 const SYSTEM_PROMPT =
   "You are a helpful, friendly assistant. Provide concise and accurate responses.";
@@ -36,10 +35,16 @@ export default {
     if (url.pathname === "/api/chat") {
       // Handle POST requests for chat
       if (request.method === "POST") {
-        return handleChatRequest(request, env);
+        return handleChatRequest(request, env, SYSTEM_PROMPT);
       }
-
       // Method not allowed for other request types
+      return new Response("Method not allowed", { status: 405 });
+    }
+
+    if (url.pathname === "/api/login") {
+      if (request.method === "POST") {
+        return handleLoginRequest(request, env);
+      }
       return new Response("Method not allowed", { status: 405 });
     }
 
@@ -47,73 +52,3 @@ export default {
     return new Response("Not found", { status: 404 });
   },
 } satisfies ExportedHandler<Env>;
-
-/**
- * Handles chat API requests
- */
-async function handleChatRequest(
-  request: Request,
-  env: Env,
-): Promise<Response> {
-  // define secrets pulled from the Cloudflare dashboard
-  const GATEWAY_TOKEN = env.LLM_CHAT_APP;
-  const gateway = env.AI.gateway("neural-fab")
-  try {
-    // Parse JSON request body
-    const { messages = [] } = (await request.json()) as {
-      messages: ChatMessage[];
-    };
-
-    // Add system prompt if not present
-    if (!messages.some((msg) => msg.role === "system")) {
-      messages.unshift({ role: "system", content: SYSTEM_PROMPT });
-    }
-
-/*       const response = await gateway.run({
-      provider: "workers-ai",
-      endpoint: "/v1/10db11242a1e4dc47dce52214e9b7aae/neural-fab/compat/chat/completions",
-      headers: {
-        "cf-aig-authorization": `Bearer ${GATEWAY_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      query: {
-        model: MODEL_ID,
-        messages,
-        max_tokens: 1024,
-      }
-    })  */
-
-      const response = await env.AI.run(
-      MODEL_ID,
-      {
-        messages,
-        max_tokens: 1024,
-      },
-      {
-        returnRawResponse: true,
-        // Uncomment to use AI Gateway
-        gateway: {
-          id: "neural-fab",//env.GATEWAY_ID, //"", // Replace with your AI Gateway ID
-          skipCache: false,      // Set to true to bypass cache
-          cacheTtl: 3600,        // Cache time-to-live in seconds
-        },
-      },
-/*       headers: {
-        "cf-aig-authorization": `Bearer ${GATEWAY_TOKEN}`,
-        //Authorization: `Bearer ${GATEWAY_TOKEN}`,
-      } */
-    ); 
-
-    // Return streaming response
-    return response;
-  } catch (error) {
-    console.error("Error processing chat request:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to process request" }),
-      {
-        status: 500,
-        headers: { "content-type": "application/json" },
-      },
-    );
-  }
-}
